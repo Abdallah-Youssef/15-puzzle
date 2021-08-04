@@ -81,6 +81,14 @@ function App() {
 
   }
 
+  const shuffleArray = () => {
+    let newTiles = [...tiles]
+      for (let i = newTiles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newTiles[i], newTiles[j]] = [newTiles[j], newTiles[i]];
+      }
+      setTiles(newTiles)
+  }
 
 
   return (
@@ -98,9 +106,15 @@ function App() {
           <div className="play-again-div">
             <button className="play-again-btn" onClick={()=>{setWinner(false); setMoves(0)}}>Play Again</button>
           </div>}
+
+
       </div>
 
+      <div className="sidebar">
       <h3> Moves : {moves}</h3>
+        <button className="shuffle" onClick={shuffleArray}> Shuffle</button>
+      </div>
+
 
     </React.Fragment>
 
