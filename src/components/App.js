@@ -28,8 +28,14 @@ import { Tile } from './Tile';
 
 
 
-function valid_index(index) {
-  return index >= 0 && index <= 15
+function getAdjacentPositions(index) {
+  let arr = [], i = index /4, j = index % 4
+
+  if (i !== 0) arr.push(index-4)
+  if (i !== 3) arr.push(index+4)
+  if (j !== 0) arr.push(index-1)
+  if (j !== 3) arr.push(index+1)
+  return arr
 }
 
 function ordered() {
@@ -50,12 +56,10 @@ function App() {
 
   const onSelect = (pressed_index) => {
 
-    let adjacent_positions = [
-      pressed_index + 4, pressed_index - 4, pressed_index + 1, pressed_index - 1
-    ]
+    let adjacent_positions = getAdjacentPositions(pressed_index)
 
     for (let index of adjacent_positions) {
-      if (valid_index(index) && tiles[index] === 0) {
+      if (tiles[index] === 0) {
         let new_tiles = [...tiles] // copy
         let temp = new_tiles[index]
         new_tiles[index] = new_tiles[pressed_index]
