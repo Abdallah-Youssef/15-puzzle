@@ -29,7 +29,7 @@ import { Tile } from './Tile';
 
 
 function getAdjacentPositions(index) {
-  let arr = [], i = index /4, j = index % 4
+  let arr = [], i = Math.floor(index /4), j = index % 4
 
   if (i !== 0) arr.push(index-4)
   if (i !== 3) arr.push(index+4)
