@@ -11,10 +11,9 @@
 
 }
 
-h1, h3{
+h1, h3, h4{
   color: whitesmoke;
   text-align: center;
-
 }
 
 .tile{
@@ -44,17 +43,4 @@ h1, h3{
 
 
 
-.sidebar{
-  position: absolute;
-  right: 10%;
-  top: 40%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.shuffle {
-  height: 40px;
-  width: 80px;
-}
 

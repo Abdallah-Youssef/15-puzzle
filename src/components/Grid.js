@@ -1,35 +1,14 @@
-import '../css/App.css';
+import '../css/Grid.css';
 import React, { useEffect, useState } from 'react';
 import { Tile } from './Tile';
+import { SideBar } from './SideBar';
 
 
-// function randomized(tiles){
-//   let values = [...Array(15).keys()].map((x) => x+1) // array of numbers from 1 -> 15
-
-//   let i = 0, j = 0
-//   while (values.length){
-
-//     // Take a random element from the values array
-//     let r = Math.floor(Math.random()*values.length)
-//     tiles[i][j] = values[r]
-//     values.splice(r, 1)
-
-//     // move to the next tile cell
-//     j++
-//     if (j === 4){
-//       j = 0
-//       i++
-//     }
-//   }
-
-//   tiles[3][3] = 0
-
-// }
-
-
+const EPSILON = 0.00000001
+const getRandomNum = (max) => Math.floor(Math.random() * (max-EPSILON))
 
 function getAdjacentPositions(index) {
-  let arr = [], i = index /4, j = index % 4
+  let arr = [], i = Math.floor(index /4), j = index % 4
 
   if (i !== 0) arr.push(index-4)
   if (i !== 3) arr.push(index+4)
@@ -44,7 +23,7 @@ function ordered() {
   return tiles
 }
 
-function App() {
+function Grid() {
   const [tiles, setTiles] = useState([])
   const [winner, setWinner] = useState(false)
   const [moves, setMoves] = useState(0)
@@ -61,6 +40,8 @@ function App() {
     for (let index of adjacent_positions) {
       if (tiles[index] === 0) {
         let new_tiles = [...tiles] // copy
+
+        
         let temp = new_tiles[index]
         new_tiles[index] = new_tiles[pressed_index]
         new_tiles[pressed_index] = temp
@@ -85,24 +66,38 @@ function App() {
 
   }
 
-  const shuffleArray = () => {
-    let newTiles = [...tiles]
-      for (let i = newTiles.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [newTiles[i], newTiles[j]] = [newTiles[j], newTiles[i]];
-      }
+  const shuffleArray = (numSwaps) => {
+    console.log(numSwaps);
+
+
+    let newTiles = ordered()
+    while(numSwaps--){
+        const indexOfZero  = newTiles.indexOf(0)
+        console.log("indexOfZero", indexOfZero);
+        const adjacent_positions = getAdjacentPositions(indexOfZero)
+        console.log(adjacent_positions);
+        const randomNum = getRandomNum(adjacent_positions.length); 
+        const randomPosIndex = adjacent_positions[randomNum];// MUST KEEP THE SEMICOLON HERE IDK WHY
+        [newTiles[indexOfZero], newTiles[randomPosIndex]] = [newTiles[randomPosIndex], newTiles[indexOfZero]]
+
+    }
+    //   for (let i = newTiles.length - 1; i > 0; i--) {
+    //       const j = Math.floor(Math.random() * (i + 1));
+    //       [newTiles[i], newTiles[j]] = [newTiles[j], newTiles[i]];
+    //   }
       setTiles(newTiles)
+      setMoves(0)
   }
 
 
   return (
-    <React.Fragment>
+    <>
       <h1> 15 puzzle </h1>
 
       <div className="App">
         {
           tiles.map((x, i) => (
-            <Tile onSelect={onSelect} value={x} index={i} disabled={winner} />
+            <Tile key={i} onSelect={onSelect} value={x} index={i} disabled={winner} />
           ))
         }
 
@@ -114,15 +109,13 @@ function App() {
 
       </div>
 
-      <div className="sidebar">
-      <h3> Moves : {moves}</h3>
-        <button className="shuffle" onClick={shuffleArray}> Shuffle</button>
-      </div>
+      <SideBar moves={moves} shuffleArray={shuffleArray}/>
 
 
-    </React.Fragment>
+
+    </>
 
   );
 }
 
-export default App;
+export default Grid;
